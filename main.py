@@ -18,7 +18,7 @@ from db import createConnection, executeQuery, \
     updateDB, searchInDB
 from stringConversion import conversionFIOToFamilia, conversionFIO, deleteSpace
 
-from message import START_MESSAGE, HELP_MESSAGE
+from message import START_MESSAGE, HELP_MESSAGE, EMPTY_MESSAGE, ERROR_MESSAGE
     
 
 PATH_DB = 'data base.db'
@@ -66,9 +66,9 @@ async def find_familia(message: types.Message, state: FSMContext):
     inputUser = conversionFIOToFamilia(inputUser)
     answer = searchInDB(connection, inputUser, "familia")
     if answer == None:
-        await message.answer("Ошибка!")
+        await message.answer(ERROR_MESSAGE)
     elif len(answer) == 0:
-        await message.answer("Ничего не найдено!")
+        await message.answer(EMPTY_MESSAGE)
     else:
         for ans in answer:
             await message.answer(ans[0], parse_mode="html")
@@ -86,9 +86,9 @@ async def find_fio(message: types.Message, state: FSMContext):
     inputUser = conversionFIO(inputUser)
     answer = searchInDB(connection, inputUser, "fio")
     if answer == None:
-        await message.answer("Ошибка!")
+        await message.answer(ERROR_MESSAGE)
     elif len(answer) == 0:
-        await message.answer("Ничего не найдено!")
+        await message.answer(EMPTY_MESSAGE)
     else:
         for ans in answer:
             await message.answer(ans[0], parse_mode="html")
@@ -106,9 +106,9 @@ async def find_kab(message: types.Message, state: FSMContext):
     inputUser = deleteSpace(inputUser)
     answer = searchInDB(connection, inputUser, "kab")
     if answer == None:
-        await message.answer("Ошибка!")
+        await message.answer(ERROR_MESSAGE)
     elif len(answer) == 0:
-        await message.answer("Ничего не найдено!")
+        await message.answer(EMPTY_MESSAGE)
     else:
         for ans in answer:
             await message.answer(ans[0], parse_mode="html")
@@ -127,9 +127,9 @@ async def find_email(message: types.Message, state: FSMContext):
     inputUser = deleteSpace(inputUser)
     answer = searchInDB(connection, inputUser, "email")
     if answer == None:
-        await message.answer("Ошибка!")
+        await message.answer(ERROR_MESSAGE)
     elif len(answer) == 0:
-        await message.answer("Ничего не найдено!")
+        await message.answer(EMPTY_MESSAGE)
     else:
         for ans in answer:
             await message.answer(ans[0], parse_mode="html")
@@ -147,9 +147,9 @@ async def find_tel(message: types.Message, state: FSMContext):
     inputUser = deleteSpace(inputUser)
     answer = searchInDB(connection, inputUser, "tel")
     if answer == None:
-        await message.answer("Ошибка!")
+        await message.answer(ERROR_MESSAGE)
     elif len(answer) == 0:
-        await message.answer("Ничего не найдено!")
+        await message.answer(EMPTY_MESSAGE)
     else:
         for ans in answer:
             await message.answer(ans[0], parse_mode="html")
