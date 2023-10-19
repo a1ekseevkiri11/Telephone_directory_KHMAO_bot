@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup as Soup
 from fontConversionTelegram import bold
+from stringConversion import conversionFIOToFamilia, conversionFIO
 
 #constant for parsing
 FIND_TELEFON = "Тел.:"
@@ -61,7 +62,7 @@ def getArraySotr():
     response = requests.get(URL, headers=HEADERS)
     print(response)
 
-    bs = BeautifulSoup(response.text, "html")
+    bs = BeautifulSoup(response.text, "html.parser")
     arraySotrForParsing = bs.find_all("li", {"class" : "sotr"})
     
     for sotr in arraySotrForParsing:
@@ -119,18 +120,12 @@ def getArraySotr():
     return arrayWorkers
 
 
-
-def searcWorker(inputUser):
+def getArraySotrForDB():
     arrayWorkers = getArraySotr()
-    answer = []
+    ArraySotrForDB = []
     for worker in arrayWorkers:
-        if worker.fio == inputUser:
-            answer.append(worker.makeCard())
-    if len(answer) == 0:
-        answer.append(CARD_EMPTY_TEXT)
-    return answer
-
-
-# 
-# сделать функцию поиска по имени, ФИО, номеру телефона, кабинет и тд
-# скорее всего придется писать функцию преобразования строки введеной пользователем
+        if conversionFIOToFamilia(worker.fio) == "" or conversionFIO(worker.fio) == "":
+            continue
+        row = (conversionFIOToFamilia(worker.fio), conversionFIO(worker.fio), worker.makeCard())
+        ArraySotrForDB.append(row)
+    return ArraySotrForDB

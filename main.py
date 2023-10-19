@@ -10,30 +10,52 @@ from aiogram.utils.markdown import hbold
 from aiogram.types import ReplyKeyboardRemove, \
     ReplyKeyboardMarkup, KeyboardButton, \
     InlineKeyboardMarkup, InlineKeyboardButton
-from parsing import searcWorker
+from aiogram.fsm.storage.memory import MemoryStorage
+from aiogram.fsm.context import FSMContext
+from aiogram.fsm.state import State, StatesGroup
 
+from db import createConnection, executeQuery, \
+    updateDB, searchFIOInDB, searchFamiliaInDB
+from stringConversion import conversionFIOToFamilia, conversionFIO
+    
+
+PATH_DB = 'data base.db'
 
 TOKEN = '6392740543:AAEAznA8-Zjh5c1XcFJeZOScRLDXgbJFe5Y'
 
 dp = Dispatcher()
+connection = createConnection(PATH_DB)
+
+class FindFamilia(StatesGroup):
+    find = State()
 
 
 @dp.message(CommandStart())
-async def command_start_handler(message: Message) -> None:
+async def command_start(message: Message):
     await message.answer(f"Hello, {hbold(message.from_user.full_name)}!")
 
 
-# @dp.message(Command("fio"))
-# async def command_fio_handler(message: types.Message):
+@dp.message(Command("familia"))
+async def command_familia(message: types.Message, state: FSMContext):
+    await state.set_state(FindFamilia.find)
+    await message.answer("Введите фамилию: ")
+    
 
 
-@dp.message()
-async def command_fio_handler(message: types.Message):
+@dp.message(FindFamilia.find)
+async def find_familia(message: types.Message, state: FSMContext):
     inputUser = message.text
-    answer = searcWorker(inputUser)
-    for a in answer:
-        await message.answer(a, parse_mode="html")
-    await message.answer("Вводи следующие ФИО")
+    inputUser = conversionFIOToFamilia(inputUser)
+    answer = searchFamiliaInDB(connection, inputUser)
+    if answer == None:
+        await message.answer("Ошибка!")
+    elif len(answer) == 0:
+        await message.answer("Ничего не найдено!")
+    else:
+        for ans in answer:
+            await message.answer(ans[0], parse_mode="html")
+    await state.clear()
+
 
 
 
@@ -44,5 +66,6 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    updateDB(connection)
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
     asyncio.run(main())
