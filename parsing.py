@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup as Soup
 from fontConversionTelegram import bold
-from stringConversion import conversionFIOToFamilia, conversionFIO
+from stringConversion import conversionFIOToFamilia, conversionFIO, deleteSpace
 
 #constant for parsing
 FIND_TELEFON = "Тел.:"
@@ -18,7 +18,8 @@ CARD_TELEFON_TEXT = "Телефон: "
 CARD_TELEFON_VN_TEXT = "Внутренний телефон: "
 CARD_FAX_TEXT = "Факс: "
 CARD_KAB_TEXT = "Кабинет: "
-CARD_EMPTY_TEXT = "По вашему запросу ничего не найдено!"
+CARD_EMAIL_TEXT = "E-mail: "
+
 
 #constant for request
 URL = 'https://admhmao.ru/organy-vlasti/telefonnyy-spravochnik-ogv-hmao/'
@@ -33,6 +34,7 @@ class Worker:
     telefonVn = ""
     fax = ""
     kab = ""
+    email = ""
 
     #create card(сообщение, которое отправится пользователю)
     def makeCard(self):
@@ -47,6 +49,8 @@ class Worker:
             card += bold(CARD_TELEFON_TEXT) + self.telefon + "\n"
         if self.telefonVn != "" and self.telefonVn != "-":
             card += bold(CARD_TELEFON_VN_TEXT) + self.telefonVn + "\n"
+        if self.email != "":
+            card += bold(CARD_EMAIL_TEXT) + self.email + "\n"
         if self.fax != "":
             card += bold(CARD_FAX_TEXT) + self.fax + "\n"
         if self.kab != "":
@@ -120,12 +124,13 @@ def getArraySotr():
     return arrayWorkers
 
 
+
 def getArraySotrForDB():
     arrayWorkers = getArraySotr()
     ArraySotrForDB = []
     for worker in arrayWorkers:
         if conversionFIOToFamilia(worker.fio) == "" or conversionFIO(worker.fio) == "":
             continue
-        row = (conversionFIOToFamilia(worker.fio), conversionFIO(worker.fio), worker.makeCard())
+        row = (conversionFIOToFamilia(worker.fio), conversionFIO(worker.fio), deleteSpace(worker.kab), deleteSpace(worker.telefon), deleteSpace(worker.email), worker.makeCard())
         ArraySotrForDB.append(row)
     return ArraySotrForDB
