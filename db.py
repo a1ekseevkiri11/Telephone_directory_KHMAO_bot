@@ -2,16 +2,6 @@ import sqlite3
 from sqlite3 import Error
 from parsing import getArraySotrForDB
 
-CREATE_SOTR_TABLE = """CREATE TABLE sotr (
-    familia text,
-    fio text,
-    kab text,
-    telefon text,
-    email text,
-    card text
-)
-"""
-
 def createConnection(path):
     connection = None
     try:
@@ -66,85 +56,3 @@ def searchInDB(connection, inputUser, filter):
         return result
     except Error as e:
         print(f"The error '{e}' occurred")
-    
-
-# def searchFIOInDB(connection, inputUser):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute("SELECT card FROM sotr WHERE fio = ?", (inputUser,))
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-    
-
-
-# def searchFamiliaInDB(connection, inputUser):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute("SELECT card FROM sotr WHERE familia = ?", (inputUser,))
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-
-
-# def searchKabInDB(connection, inputUser):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute("SELECT card FROM sotr WHERE kab = ?", (inputUser,))
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-
-
-# def searchTelefonInDB(connection, inputUser):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute("SELECT card FROM sotr WHERE telefon = ?", (inputUser,))
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-
-
-# def searchEmailInDB(connection, inputUser):
-#     cursor = connection.cursor()
-#     result = None
-#     try:
-#         cursor.execute("SELECT card FROM sotr WHERE email = ?", (inputUser,))
-#         result = cursor.fetchall()
-#         return result
-#     except Error as e:
-#         print(f"The error '{e}' occurred")
-
-
-
-
-if __name__ == "__main__":
-    connection = createConnection('data base.db')
-    #updateDB(connection)
-
-    # while True:
-    #     command = int(input("Введите номер команды: "))
-    #     if command == 1:
-    #         inputUser = str(input("Введите ФИО:"))
-    #         answer = searchFIOInDB(connection, inputUser)
-    #         if len(answer) == 0:
-    #             print("Ничего не найдено!")
-    #         for a in answer:
-    #             print(a)
-    #     elif command == 2:
-    #         inputUser = str(input("Введите фамилию:"))
-    #         answer = searchFamiliaInDB(connection, inputUser)
-    #         if len(answer) == 0:
-    #             print("Ничего не найдено!")
-    #         for a in answer:
-    #             print(a)
-    #     else:
-    #         break

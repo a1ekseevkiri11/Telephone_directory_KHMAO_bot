@@ -1,8 +1,15 @@
-# from aiogram.types import ReplyKeyboardRemove, \
-#     ReplyKeyboardMarkup, KeyboardButton, \
-#     InlineKeyboardMarkup, InlineKeyboardButton
+from aiogram.types import ReplyKeyboardRemove, \
+    ReplyKeyboardMarkup, KeyboardButton, \
+    InlineKeyboardMarkup, InlineKeyboardButton
 
-# button_hi = KeyboardButton('Привет! 👋')
 
-# greet_kb = ReplyKeyboardMarkup()
-# greet_kb.add(button_hi)
+kb = [
+    [KeyboardButton(text="/help")],
+    [KeyboardButton(text="/familia")],
+    [KeyboardButton(text="/fio")],
+    [KeyboardButton(text="/kab")],
+    [KeyboardButton(text="/email")],
+    [KeyboardButton(text="/tel")]
+]
+
+menuKeyboard = ReplyKeyboardMarkup(keyboard=kb)
