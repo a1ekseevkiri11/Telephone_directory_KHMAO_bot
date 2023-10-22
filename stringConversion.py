@@ -1,7 +1,8 @@
-
+import re
 
 def deleteSpace(str):
     return str.replace(" ", "")
+
 
 def conversionFIOToFamilia(fio):
     fio = fio.strip()
@@ -17,3 +18,7 @@ def conversionFIO(fio):
     fio = deleteSpace(fio)
     fio = fio.lower()
     return fio
+
+
+def clearTelefonNumber(tel):
+    return re.sub("[^0-9]", "", tel)

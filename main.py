@@ -16,9 +16,15 @@ from aiogram.fsm.state import State, StatesGroup
 
 from db import createConnection, executeQuery, \
     updateDB, searchInDB
-from stringConversion import conversionFIOToFamilia, conversionFIO, deleteSpace
 
-from message import START_MESSAGE, HELP_MESSAGE, EMPTY_MESSAGE, ERROR_MESSAGE
+from stringConversion import conversionFIOToFamilia,\
+    conversionFIO, deleteSpace, clearTelefonNumber
+
+from message import START_MESSAGE, HELP_MESSAGE,\
+    EMPTY_MESSAGE, ERROR_MESSAGE, STUB_MESSAGE,\
+    EXPECTATION_TEL_MESSAGE, EXPECTATION_EMAIL_MESSAGE,\
+    EXPECTATION_KAB_MESSAGE, EXPECTATION_FIO_MESSAGE,\
+    EXPECTATION_FAMILIA_MESSAGE
 
 from button import menuKeyboard
     
@@ -55,27 +61,27 @@ async def command_familia(message: types.Message, state: FSMContext):
 @dp.message(Command("familia"))
 async def command_familia(message: types.Message, state: FSMContext):
     await state.set_state(FindFamilia.find)
-    await message.answer("Введите фамилию:")
+    await message.answer(EXPECTATION_FAMILIA_MESSAGE)
     
 @dp.message(Command("fio"))
 async def command_fio(message: types.Message, state: FSMContext):
     await state.set_state(FindFIO.find)
-    await message.answer("Введите ФИО:")
+    await message.answer(EXPECTATION_FIO_MESSAGE)
 
 @dp.message(Command("kab"))
 async def command_kab(message: types.Message, state: FSMContext):
     await state.set_state(FindKab.find)
-    await message.answer("Введите номер кабинета:")
+    await message.answer(EXPECTATION_KAB_MESSAGE)
 
 @dp.message(Command("email"))
 async def command_email(message: types.Message, state: FSMContext):
     await state.set_state(FindEmail.find)
-    await message.answer("Введите E-mail:")
+    await message.answer(EXPECTATION_EMAIL_MESSAGE)
 
 @dp.message(Command("tel"))
 async def command_tel(message: types.Message, state: FSMContext):
     await state.set_state(FindTelefon.find)
-    await message.answer("Введите номер телефона:")
+    await message.answer(EXPECTATION_TEL_MESSAGE)
 
 
 @dp.message(FindFamilia.find)
@@ -141,7 +147,9 @@ async def find_email(message: types.Message, state: FSMContext):
 @dp.message(FindTelefon.find)
 async def find_tel(message: types.Message, state: FSMContext):
     inputUser = message.text
-    inputUser = deleteSpace(inputUser)
+    inputUser =  clearTelefonNumber(inputUser)
+    if len(inputUser) >= 11:
+        inputUser[len(inputUser) - 10:]#обрезаю номер телефона по последним 10 символам 
     answer = searchInDB(connection, inputUser, "tel")
     if answer == None:
         await message.answer(ERROR_MESSAGE)
@@ -152,8 +160,13 @@ async def find_tel(message: types.Message, state: FSMContext):
             await message.answer(ans[0], parse_mode="html")
     await state.clear()
 
+@dp.message()
+async def find_tel(message: types.Message):
+    await message.answer(STUB_MESSAGE)
+
+
 async def main() -> None:
-    TOKEN = str(input())
+    TOKEN = str(input("Введита TOKEN:"))
     bot = Bot(TOKEN, parse_mode=ParseMode.HTML)
     await dp.start_polling(bot)
 

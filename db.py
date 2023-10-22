@@ -43,13 +43,13 @@ def searchInDB(connection, inputUser, filter):
     try:
         match filter:
             case "fio":
-                cursor.execute("SELECT card FROM sotr WHERE fio = ?", (inputUser,))
+                cursor.execute("SELECT card FROM sotr WHERE fio LIKE ?", ("%" + inputUser + "%",))
             case "familia":
                 cursor.execute("SELECT card FROM sotr WHERE familia = ?", (inputUser,))
             case "kab":
-                cursor.execute("SELECT card FROM sotr WHERE kab = ?", (inputUser,))
+                cursor.execute("SELECT card FROM sotr WHERE kab LIKE ?", ("%" + inputUser + "%",))
             case "tel":
-                cursor.execute("SELECT card FROM sotr WHERE telefon = ?", (inputUser,))
+                cursor.execute("SELECT card FROM sotr WHERE telefon LIKE ?", ("%" + inputUser + "%",))
             case "email":
                 cursor.execute("SELECT card FROM sotr WHERE email = ?", (inputUser,))
         result = cursor.fetchall()

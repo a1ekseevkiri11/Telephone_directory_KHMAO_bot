@@ -19,3 +19,19 @@ EMPTY_MESSAGE = "По вашему запросу ничего не найден
 ERROR_MESSAGE = "ОШИБКА! Бот может работать не правильно!"
 
 
+STUB_MESSAGE = "Для поиска введите одну из команд - /help"
+
+
+EXPECTATION_TEL_MESSAGE = "Введите номер телефона:"
+
+
+EXPECTATION_EMAIL_MESSAGE = "Введите E-mail:"
+
+
+EXPECTATION_KAB_MESSAGE = "Введите номер кабинета:"
+
+
+EXPECTATION_FIO_MESSAGE = "Введите ФИО:"
+
+
+EXPECTATION_FAMILIA_MESSAGE = "Введите фамилию:"

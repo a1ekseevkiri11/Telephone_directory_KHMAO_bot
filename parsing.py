@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from bs4 import BeautifulSoup as Soup
 from fontConversionTelegram import bold
-from stringConversion import conversionFIOToFamilia, conversionFIO, deleteSpace
+from stringConversion import conversionFIOToFamilia, conversionFIO, deleteSpace, clearTelefonNumber
 
 #constant for parsing
 FIND_TELEFON = "Тел.:"
@@ -131,6 +131,6 @@ def getArraySotrForDB():
     for worker in arrayWorkers:
         if conversionFIOToFamilia(worker.fio) == "" or conversionFIO(worker.fio) == "":
             continue
-        row = (conversionFIOToFamilia(worker.fio), conversionFIO(worker.fio), deleteSpace(worker.kab), deleteSpace(worker.telefon), deleteSpace(worker.email), worker.makeCard())
+        row = (conversionFIOToFamilia(worker.fio), conversionFIO(worker.fio), deleteSpace(worker.kab), clearTelefonNumber(worker.telefon), deleteSpace(worker.email), worker.makeCard())
         ArraySotrForDB.append(row)
     return ArraySotrForDB
